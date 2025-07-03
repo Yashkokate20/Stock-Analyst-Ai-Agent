@@ -10,7 +10,7 @@
 
 ## 🌟 Overview
 
-The **Stock Analyst AI Agent 2.0** is a comprehensive workflow automation system built on n8n that combines real-time stock data, AI-powered analysis, and instant communication to deliver professional-grade market insights directly to your Telegram chat.
+The **Stock Analyst AI Agent** is a comprehensive workflow automation system built on n8n that combines real-time stock data, AI-powered analysis, and instant communication to deliver professional-grade market insights directly to your Telegram chat.
 
 ### ✨ Key Features
 
@@ -80,7 +80,7 @@ cd stock-analyst-ai-agent
 ### 2. Import Workflow
 1. Open your n8n instance
 2. Go to **Workflows** > **Import from file**
-3. Upload `Stock_analyst_Ai_Agent_2_0.json`
+3. Upload `Stock_analyst_Ai_Agent.json`
 4. Click **Import**
 
 ### 3. Configure Credentials
@@ -209,11 +209,10 @@ This analysis is for educational purposes only.
 
 ## 🔮 Future Enhancements
 
-- [ ] **Multi-timeframe analysis** (1m, 5m, 1h, 1d)
+- [ ] **Multi-timeframe analysis** (1m, 5m, 15m, 1h)
 - [ ] **Portfolio tracking** capabilities
 - [ ] **Alerts system** for price targets
 - [ ] **Fundamental analysis** integration
-- [ ] **Crypto support** via Binance API
 - [ ] **Risk management** calculations
 - [ ] **Custom indicators** support
 - [ ] **Voice message** analysis
