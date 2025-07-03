@@ -142,7 +142,8 @@ Indicators: MACD, Volume Profile
 ✅ Strong support at $194 level
 📉 Resistance near $200 psychological level
 ✅ Volume above average indicating institutional interest
-📈 Moving averages suggest bullish momentum
+📈 Moving averages suggest bullish momentum + (Detail Compriensive analysis with Buy and sell recomendatatiion based on the analysis)
+
 
 This analysis is for educational purposes only.
 ```
