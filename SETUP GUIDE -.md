@@ -69,7 +69,7 @@ about - About this bot
 1. **Open n8n**: Navigate to your n8n instance
 2. **Go to Workflows**: Click on "Workflows" in the sidebar
 3. **Import**: Click "Import from file" button
-4. **Select file**: Choose `Stock_analyst_Ai_Agent_2_0.json`
+4. **Select file**: Choose `Stock_analyst_Ai_Agent.json`
 5. **Import**: Click "Import" to add the workflow
 
 ### Step 2: Configure Credentials
