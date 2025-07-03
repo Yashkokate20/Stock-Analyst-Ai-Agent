@@ -1,0 +1,565 @@
+{
+  "name": "Stock analyst Ai Agent 2.0",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        540
+      ],
+      "id": "01ae26a0-3663-475a-a125-1362ef7005be",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SMHQIeFZpdlnwqdE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        560
+      ],
+      "id": "9bc7d2a1-1423-4362-bc6e-4eccecd38004",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SMHQIeFZpdlnwqdE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        280
+      ],
+      "id": "42af7757-26f7-447d-9037-fabd1c398ba0",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SMHQIeFZpdlnwqdE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        280
+      ],
+      "id": "49d5a873-ad69-4f7a-a8b2-88a6cf8a3566",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SMHQIeFZpdlnwqdE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=You are an API URL generator for stock analysis using Twelve Data API. Your goal is to generate a complete URL based on user requests for stock data analysis.\n\nUse this URL format:\nhttps://api.twelvedata.com/time_series?symbol={{SYMBOL}}&interval={{INTERVAL}}&outputsize={{OUTPUTSIZE}}&apikey={{API_KEY}}\n\nFill the placeholders:\n- SYMBOL = stock ticker (with exchange, e.g. TATAMOTORS.BSE or AAPL)\n- INTERVAL = 1min, 5min, 15min, 1day, 1week, or 1month\n- OUTPUTSIZE = number of data points (e.g. 1 for latest day, 5 for past 5 days)\n- API_KEY = just use `{{API_KEY}}`\n\n\n🔑 Here's the Twelve Data API Key: \ne2b2120b928e4e97a4bf3c421307613b\n\n\nIf the user says:  \n\"Give me TATA Motors data for the last 3 days\" → Output:  \nhttps://api.twelvedata.com/time_series?symbol=TATAMOTORS.BSE&interval=1day&outputsize=3&apikey={{API_KEY}}\n\nOnly return the full URL. No explanation.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -1420,
+        300
+      ],
+      "id": "d8219f7c-38b1-4808-84fc-174aa76561ad",
+      "name": "Twelve URL Generator"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -980,
+        300
+      ],
+      "id": "d49ef4a6-f229-46c6-b325-ac0c542dbb2f",
+      "name": "TWELVE STOCK DATA"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a JSON generator for chart-img.com using TradingView chart configuration.\n\nHere's the Stock data:\nSymbol: {{ $json.meta.symbol }}\nInterval: {{ $json.meta.interval }}\ncurrency: {{ $json.meta.currency }}\nexchange_timezone: {{ $json.meta.exchange_timezone }}\nexchange: {{ $json.meta.exchange }}\nmic_code: {{ $json.meta.mic_code }}\ntype: {{ $json.meta.type }}\ndatetime: {{ $json.values[0].datetime }}\nopen: {{ $json.values[0].open }}\nhigh: {{ $json.values[0].high }}\nlow: {{ $json.values[0].low }}\nclose: {{ $json.values[0].close }}\nvolume: {{ $json.values[0].volume }}\nstatus: {{ $json.status }}\n\nYour task is to create a JSON object that works with the Chart-IMG Advanced TradingView chart API.\n\nFrom the Stock Data JSON:\n- Extract the `symbol` and `exchange` from the `meta` section.\n- Convert them into TradingView format: \"<EXCHANGE>:<SYMBOL>\", e.g. \"NASDAQ:TSLA\".\n- Use the `interval` and convert it to TradingView format:\n  - \"1day\" → \"1D\", \"1week\" → \"1W\", \"1month\" → \"1M\"\n\nYour output must be in this format:\n\n{\n  \"theme\": \"dark\",\n  \"symbol\": \"BINANCE:ETHUSDT\",\n  \"studies\": [\n    {\n      \"name\": \"Volume Profile Visible Range\",\n      \"override\": {\n        \"graphics.horizlines.pocLines.color\": \"rgb(0,0,255)\"\n      }\n    },\n    {\n  \"height\": 300,\n  \"theme\": \"dark\",\n  \"studies\": [\n    {\n      \"name\": \"Moving Average Triple\",\n      \"input\": {\n        \"firstPeriods\": 20,\n        \"secondPeriods\": 50,\n        \"thirdPeriods\": 100,\n        \"method\": \"Simple\"\n      },\n      \"override\": {\n        \"Plot 1.linewidth\": 1,\n        \"Plot 1.plottype\": \"line\",\n        \"Plot 1.color\": \"rgb(255,109,0)\",\n        \"Plot 2.linewidth\": 1,\n        \"Plot 2.plottype\": \"line\",\n        \"Plot 2.color\": \"rgb(33,150,243)\",\n        \"Plot 3.linewidth\": 1,\n        \"Plot 3.plottype\": \"line\",\n        \"Plot 3.color\": \"rgb(38,198,218)\"\n      }\n    }\n  ]\n}\nOnly return the final JSON — no comments or extra explanation.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -780,
+        -20
+      ],
+      "id": "ec6d5e18-2214-42b4-b4b9-a77956d1f315",
+      "name": "CHART IMG JSON"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "json",
+              "description": "=transform the data in to a valid json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        -460,
+        280
+      ],
+      "id": "0dc832a8-d880-416b-ace9-36cc48cb9c07",
+      "name": "JSON PURIFY"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Stock Data:\nSymbol: {{ $('TWELVE STOCK DATA').item.json.meta.symbol }}\nInterval: {{ $('TWELVE STOCK DATA').item.json.meta.interval }}\ncurrency: {{ $('TWELVE STOCK DATA').item.json.meta.currency }}\nexchange_timezone: {{ $('TWELVE STOCK DATA').item.json.meta.exchange_timezone }}\nexchange: {{ $('TWELVE STOCK DATA').item.json.meta.exchange }}\nmic_code: {{ $('TWELVE STOCK DATA').item.json.meta.mic_code }}\ntype: {{ $('TWELVE STOCK DATA').item.json.meta.type }}\ndatetime: {{ $('TWELVE STOCK DATA').item.json.values[0].datetime }}\nopen: {{ $('TWELVE STOCK DATA').item.json.values[0].open }}\nhigh: {{ $('TWELVE STOCK DATA').item.json.values[0].high }}\nlow: {{ $('TWELVE STOCK DATA').item.json.values[0].low }}\nclose: {{ $('TWELVE STOCK DATA').item.json.values[0].close }}\nvolume: {{ $('TWELVE STOCK DATA').item.json.values[0].volume }}\nstatus: {{ $('TWELVE STOCK DATA').item.json.status }}\n\nfrom this stock data give me a info like this format:\n\nhere's an example:\n📊 TSLA Stock Summary – June 24, 2025\nExchange: NASDAQ\nInterval: 1 Day\nCurrency: USD\nOpen Price: $356.14\nHigh Price: $356.20\nLow Price: $340.50\nClose Price: $342.30\nVolume: 1,305,456\nChart Style: Candlestick\nIndicators: MACD, Volume\n\n📈 See the chart above for technical view.\n\nAssume you have access to a typical daily candlestick chart, moving averages, RSI, and Volume Profile (VPVR) indicator for a major stock. Using your knowledge of technical analysis and general market behavior, write a detailed, paragraph-style analysis of the stock’s daily performance. Discuss price action in relation to likely support and resistance levels, the expected behavior of moving averages, the significance of high-volume nodes on the volume profile, and a plausible RSI reading with its implications. For every positive technical sign, include a ✅, and for every negative or cautionary sign, include a 📉. Write a brief fundamental analysis and company news summary based on what is typical for a large, actively traded company, referencing open news sources or plausible recent developments, financial performance, or future plans. Conclude with a clear summary of the overall technical and fundamental outlook, and provide a reasoned buy, sell, or neutral suggestion, explaining your reasoning. Present all insights in a single, well-structured paragraph without mentioning the company or stock name. At the end, state in bold: This analysis is for educational purposes only.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        -20
+      ],
+      "id": "e4331ac7-93f8-488c-8207-46d9a105654c",
+      "name": "STOCK ANALYZER"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.chart-img.com/v2/tradingview/advanced-chart",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "pH3B5ZoZz520hI9i39qEBkqEKXUMvXy5oa35N9xi"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $('JSON PURIFY').item.json.output.json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        260
+      ],
+      "id": "67380a97-addd-41e3-8c87-81410d5a2276",
+      "name": "CHART IMAGE GENERATION"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('GET_Message').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        -20
+      ],
+      "id": "f7061d7b-a773-4a7c-8f92-0b31d43b56c5",
+      "name": "IMAGE",
+      "webhookId": "58cb2bcb-caa3-42bd-a554-e5cdb566d06b",
+      "credentials": {
+        "telegramApi": {
+          "id": "EMH6tBpXyq7EmJfd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('GET_Message').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        500
+      ],
+      "id": "10200414-67ed-4a7b-bec1-b7a851b2c19d",
+      "name": "TEXT",
+      "webhookId": "e0ce23b6-e997-40fb-b9da-a17298a63012",
+      "credentials": {
+        "telegramApi": {
+          "id": "EMH6tBpXyq7EmJfd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## TWELVE STOCK DATA\n\n\n\n\n\n\n",
+        "height": 740,
+        "width": 220,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -280
+      ],
+      "id": "37d23097-f07b-49c5-baeb-0d05e2cfe0ac",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## CHART IMAGE\n[CHART-IMG REGISTER](https://chart-img.com/)",
+        "height": 740,
+        "width": 220,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -280
+      ],
+      "id": "fd23fd3c-45cb-4d46-931d-be3ae7165802",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1800,
+        300
+      ],
+      "id": "da3df3af-555f-44df-92f0-5ba87782fbc6",
+      "name": "GET_Message",
+      "webhookId": "2997e70e-5c87-4984-9ccd-d7479a7a67c2",
+      "notesInFlow": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "EMH6tBpXyq7EmJfd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "  ## GET_Message: \nReceives user requests from Telegram.”\n",
+        "height": 320,
+        "width": 260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1880,
+        160
+      ],
+      "id": "a9da0614-8235-4644-8bc1-bd150d543e43",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## “Twelve URL Generator: \nBuilds API call for stock data.”",
+        "height": 320,
+        "width": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1460,
+        160
+      ],
+      "id": "7a594ce0-828b-4ade-934b-141ff0952d7e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "  ## “Final Output: \nSends chart images and analysis back to the user.”\n",
+        "height": 1120,
+        "width": 280,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -280
+      ],
+      "id": "c58babb9-dc5e-4296-94e6-7334775ee22e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": ".\n## “Google Gemini Chat Model: \nHandles AI-powered analysis and chart commentary.”",
+        "width": 760,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1880,
+        520
+      ],
+      "id": "fe174f89-cc2f-4b54-b795-e1ca8355b3bd",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## “JSON Purify:\n Cleans and structures data for downstream nodes.”\n",
+        "height": 720,
+        "width": 300,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -280
+      ],
+      "id": "f7dce083-e7ac-4830-95a3-56b276002177",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 180,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        520
+      ],
+      "id": "6823f3cd-80e7-424c-9a33-4f3bde7ac687",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 180,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        240
+      ],
+      "id": "4e0361d1-2e51-4334-a0ac-f52a74779571",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 180,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        240
+      ],
+      "id": "7cfb20b1-5d14-4160-82e1-0c887814c207",
+      "name": "Sticky Note9"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Twelve URL Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "JSON PURIFY",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CHART IMG JSON",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "STOCK ANALYZER",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Twelve URL Generator": {
+      "main": [
+        [
+          {
+            "node": "TWELVE STOCK DATA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TWELVE STOCK DATA": {
+      "main": [
+        [
+          {
+            "node": "CHART IMG JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CHART IMG JSON": {
+      "main": [
+        [
+          {
+            "node": "JSON PURIFY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON PURIFY": {
+      "main": [
+        [
+          {
+            "node": "STOCK ANALYZER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "STOCK ANALYZER": {
+      "main": [
+        [
+          {
+            "node": "CHART IMAGE GENERATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CHART IMAGE GENERATION": {
+      "main": [
+        [
+          {
+            "node": "IMAGE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET_Message": {
+      "main": [
+        [
+          {
+            "node": "Twelve URL Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "61623153-a4ff-4ae6-a0ef-381012cc6863",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85d68a08f8c12cd65d3a983c420a60395eb67d1eb37cf5dc7485e3da557865fb"
+  },
+  "id": "KXIVpO60G5e2jNJx",
+  "tags": []
+}
