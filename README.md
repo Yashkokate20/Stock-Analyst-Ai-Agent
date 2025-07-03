@@ -115,14 +115,14 @@ Bot: [Sends Apple stock chart + AI analysis]
 
 ### International Stocks
 ```
-User: TATAMOTORS.BSE
-Bot: [Sends Tata Motors chart + market analysis]
+User: NVIDIA
+Bot: [Sends NVIDIA chart + Technical analysis]
 ```
 
 ### Custom Timeframes
 ```
-User: Give me Tesla data for the last 5 days
-Bot: [Sends TSLA 5-day chart + trend analysis]
+User: Stock TESLA for ! Month
+Bot: [Sends TSLA !-Month chart + Technical analysis]
 ```
 
 ## 📊 Sample Output
@@ -242,9 +242,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support & Contact
 
-- 📧 **Email**: [your-email@example.com]
-- 💬 **Telegram**: [@yourtelegram]
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/stock-analyst-ai-agent/issues)
+- 📧 **Email**: yashkokate0801@gmail.com
 - 💡 **Feature Requests**: [GitHub Discussions](https://github.com/yourusername/stock-analyst-ai-agent/discussions)
 
 ## 🙏 Acknowledgments
@@ -261,7 +259,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **⭐ Star this repository if it helped you! ⭐**
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by Yash Kokate
 
 </div>
 
