@@ -120,6 +120,8 @@ Bot: [Sends Apple stock 1 day TF Candelstick chart with RSI/volume profile/ movi
 When you request stock analysis, the bot delivers:
 
 ### 📈 Chart Image
+![image](https://github.com/user-attachments/assets/c3e5cc73-8074-4cec-9ae8-da8587a23011)
+
 - Professional TradingView-style candlestick chart
 - Moving averages (20, 50, 100 periods)
 - Volume Profile Visible Range (VPVR)
