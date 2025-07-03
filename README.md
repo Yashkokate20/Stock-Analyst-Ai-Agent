@@ -107,23 +107,13 @@ Update the following nodes with your API keys:
 
 ## 💡 Usage Examples
 
-### Basic Stock Analysis
+###  Stock Analysis
 ```
-User: AAPL
-Bot: [Sends Apple stock chart + AI analysis]
-```
-
-### International Stocks
-```
-User: NVIDIA
-Bot: [Sends NVIDIA chart + Technical analysis]
+User:  Stock AAPL for 1 day
+Bot: [Sends Apple stock 1 day TF Candelstick chart with RSI/volume profile/ moving avrage crossover indicator + AI overall Technical analysis + Buy-Sell Recomendation]
 ```
 
-### Custom Timeframes
-```
-User: Stock TESLA for ! Month
-Bot: [Sends TSLA !-Month chart + Technical analysis]
-```
+
 
 ## 📊 Sample Output
 
@@ -265,7 +255,8 @@ Made with ❤️ by Yash Kokate
 
 ## 📈 Workflow Visualization
 
-![Stock Analyst AI Agent 2.0 Workflow](brave_screenshot_localhost.jpg)
+![Stock Analyst AI Agent 2.0 Workflow](![stock analyst ai agent screenshort](https://github.com/user-attachments/assets/2ebbb3e7-0d46-4a69-8f04-3fc9adb52e25)
+)
 
 *The complete n8n workflow showing the interconnected nodes and data flow from Telegram input to final analysis output.*
 
