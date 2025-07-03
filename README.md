@@ -98,8 +98,8 @@ cd stock-analyst-ai-agent
 
 #### API Keys Configuration
 Update the following nodes with your API keys:
-- **Twelve Data API**: `e2b2120b928e4e97a4bf3c421307613b` (replace with your key)
-- **Chart-IMG API**: `pH3B5ZoZz520hI9i39qEBkqEKXUMvXy5oa35N9xi` (replace with your key)
+- **Twelve Data API**: `e2b2120b928e********307613b` (replace with your key)
+- **Chart-IMG API**: `pH3B5ZoZz5********a35N9xi` (replace with your key)
 
 ### 4. Activate Workflow
 1. Click **Active** toggle in the workflow editor
